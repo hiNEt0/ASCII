@@ -160,7 +160,7 @@ def main():
     if args.show_result:
         ascii_window = aw.TextFileViewer()
         ascii_window.text_widget.config(wrap="none")
-        ascii_window.open_file(args.outdir + args.filename)
+        ascii_window.print_text(ascii_image)
         ascii_window.mainloop()
 
 

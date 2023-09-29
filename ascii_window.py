@@ -11,8 +11,13 @@ class TextFileViewer(tk.Tk):
         self.resizable(False, False)
 
         self.font_size = 12
+        
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_columnconfigure(0, weight=1)
+        
         self.text_widget = tk.Text(self, font=("Courier", self.font_size))
-        self.text_widget.pack(fill=tk.BOTH, expand=True)
+        self.text_widget.grid(row=0, column=0, sticky='nsew')
 
         self.scrollbar = tk.Scrollbar(self.text_widget)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -24,21 +29,20 @@ class TextFileViewer(tk.Tk):
         self.text_widget.config(xscrollcommand=self.scrollbar_x.set)
         self.scrollbar_x.config(command=self.text_widget.xview)
 
-        self.button_font_inc = tk.Button(self, text="A^", command=self.increase_font_size)
-        self.button_font_inc.place(x=10, y=574)
+        self.button_frame = tk.Frame(self)
+        self.button_frame.grid(row=1, column=0, sticky='sw')
 
-        self.button_font_red = tk.Button(self, text="a˅", command=self.reduce_font_size)
-        self.button_font_red.place(x=47, y=574)
+        self.button_font_inc = tk.Button(self.button_frame, text="A^", command=self.increase_font_size)
+        self.button_font_inc.pack(side=tk.LEFT, padx=5, pady=5)
 
-        self.button_copy = tk.Button(self, text="Copy text", command=self.copy_file)
-        self.button_copy.pack(side=tk.BOTTOM)
+        self.button_font_red = tk.Button(self.button_frame, text="a˅", command=self.reduce_font_size)
+        self.button_font_red.pack(side=tk.LEFT, padx=5, pady=5)
 
-    def open_file(self, file_path):
-        if file_path:
-            with open(file_path, "r") as file:
-                content = file.read()
-                self.text_widget.delete(1.0, tk.END)
-                self.text_widget.insert(tk.END, content)
+        self.button_copy = tk.Button(self.button_frame, text="Copy text", command=self.copy_file)
+        self.button_copy.pack(side=tk.LEFT, padx=5, pady=5)
+
+    def print_text(self, text):
+        self.text_widget.insert(tk.END, text)
 
     def increase_font_size(self):
         self.font_size += 2
