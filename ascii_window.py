@@ -8,7 +8,6 @@ class TextFileViewer(tk.Tk):
 
         self.title("ASCII result")
         self.geometry("800x600")
-        self.resizable(False, False)
 
         self.font_size = 12
         
