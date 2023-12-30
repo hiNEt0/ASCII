@@ -2,10 +2,12 @@ from PIL import Image, ImageOps
 import cv2
 import os
 import imgkit
+import shutil
+
 
 def video_to_images(path):
     if os.path.exists('Images'):
-        os.rmdir('Images')
+        shutil.rmtree('Images')
     os.mkdir('Images')
     video = cv2.VideoCapture(path)
     fps = video.get(cv2.CAP_PROP_FPS)
@@ -72,15 +74,53 @@ def print_ascii(ascii_list, image, color, image_pos):
             </html>
         """)
 
-def main(video_path):
+def show_result(videoName):
+    video = cv2.VideoCapture(videoName)
+    if video.isOpened():
+        print('Video Succefully opened')
+    else:
+        print('Something went wrong when playing the video')
+
+    #define a scale lvl for visualization
+    scaleLevel = 3 #it means reduce the size to 2**(scaleLevel-1)
+
+    windowName = 'Video Player'
+    cv2.namedWindow(windowName)
+
+    while True:
+        ret, frame = video.read() 
+        if not ret:
+            print("Could not read the frame")   
+            cv2.destroyWindow(windowName)
+            break
+
+        rescaled_frame  = frame
+        for i in range(scaleLevel-1):
+            rescaled_frame = cv2.pyrDown(rescaled_frame)
+
+        cv2.imshow(windowName, rescaled_frame)
+
+        waitKey = (cv2.waitKey(1) & 0xFF)
+        if  waitKey == ord('q'):
+            print("closing video and exiting")
+            cv2.destroyWindow(windowName)
+            video.release()
+            break
+
+def convert(args):
     config = imgkit.config(wkhtmltoimage=r'wkhtmltoimage.exe')
+
     ascii_string = [".", ",", ":", ";", "+", "*", "?", "%", "$", "#", "@"]
-    fps, number_images = video_to_images(video_path)
+    if args.inversion:
+        ascii_string.reverse()
+
+    fps, number_images = video_to_images(args.path)
+
     if os.path.exists('HtmlImages'):
-        os.rmdir('HtmlImages')
+        shutil.rmtree('HtmlImages')
     os.mkdir('HtmlImages')
     if os.path.exists('TextImages'):
-        os.rmdir('TextImages')
+        shutil.rmtree('TextImages')
     os.mkdir('TextImages')
 
     for i in range(1, number_images + 1):
@@ -97,10 +137,11 @@ def main(video_path):
             exit()
 
     res = Image.open('TextImages/Image1.jpg').size
-    video = cv2.VideoWriter('final_video.mp4', cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), int(fps), res)
+    video = cv2.VideoWriter(args.outdir + args.filename + '.mp4', cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), int(fps), res)
 
     for j in range(1, number_images + 1):
         video.write(cv2.imread('TextImages/Image{0}.jpg'.format(str(j))))
     video.release()
 
-main("video.mp4")
+    if args.show_result:
+        show_result(args.outdir + args.filename + '.mp4')

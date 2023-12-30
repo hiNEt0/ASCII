@@ -90,45 +90,7 @@ def preview_file(file_path):
         print(f"File '{file_path}' not found. File preview is not possible")
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description='Image to ASCII art',
-        epilog='Enjoy ;)'
-    )
-
-    parser.add_argument(
-        'path',
-        type=str,
-        help='Input direction for image'
-    )
-    parser.add_argument(
-        '-s',
-        '--show_result',
-        action='store_true',
-        help='show result in new window'
-    )
-    parser.add_argument(
-        '-i',
-        '--inversion',
-        action='store_true',
-        help='invert image'
-    )
-    parser.add_argument(
-        '-f',
-        '--filename',
-        default='ascii.txt',
-        help='the name of the file to create. (default: ascii.txt)'
-    )
-    parser.add_argument(
-        '-o',
-        '--outdir',
-        type=str,
-        default='',
-        help='output direction for ASCII art (default: executable directory)'
-    )
-
-    args = parser.parse_args()
-
+def convert(args):
     try:
         image = Image.open(args.path)
     except FileNotFoundError:
@@ -162,6 +124,3 @@ def main():
         ascii_window.text_widget.config(wrap="none")
         ascii_window.print_text(ascii_image)
         ascii_window.mainloop()
-
-
-main()
