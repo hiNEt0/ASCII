@@ -41,7 +41,7 @@ def size_input(image):
                          ' characters separated by a space. If the original '
                          'size is required, press "Enter".\n').strip().split()
 
-        if len(new_size) == 0:
+        if not new_size:
             new_width, new_height = image.size
             is_sized = True
         elif len(new_size) != 2:
@@ -105,7 +105,7 @@ def main():
         '-s',
         '--show_result',
         action='store_true',
-        help='show the result in the console'
+        help='show result in new window'
     )
     parser.add_argument(
         '-i',
