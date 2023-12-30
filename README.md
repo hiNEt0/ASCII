@@ -7,6 +7,7 @@ python ASCIIConverter.py path_to_picture
 
 For more details run python ASCIIConverter.py -h
 
+Video converter works only on win platforms
 
 Supported formats:
 
