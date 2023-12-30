@@ -1,4 +1,3 @@
-import argparse
 import numpy as np
 import ascii_window as aw
 from PIL import Image
@@ -117,7 +116,7 @@ def convert(args):
                    for index in range(0, len(ascii_pixels), new_width)]
     ascii_image = "\n".join(ascii_image)
 
-    save_ascii(ascii_image, args.outdir + args.filename)
+    save_ascii(ascii_image, args.outdir + args.filename + '.txt')
 
     if args.show_result:
         ascii_window = aw.TextFileViewer()

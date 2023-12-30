@@ -1,5 +1,6 @@
 Image to ASCII converter.
 
+Before the first launch run: pip install -r requirements.txt
 
 Usage:
 

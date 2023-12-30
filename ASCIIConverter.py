@@ -28,8 +28,8 @@ def main():
     parser.add_argument(
         '-f',
         '--filename',
-        default='ascii.txt',
-        help='the name of the file to create. (default: ascii.txt)'
+        default='ascii_art',
+        help='the name of the file to create. (default: ascii_art)'
     )
     parser.add_argument(
         '-o',

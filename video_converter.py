@@ -108,6 +108,10 @@ def show_result(videoName):
             break
 
 def convert(args):
+    if not os.path.exists(args.path):
+        print('The file path is not correct. Closing the program')
+        exit()
+
     config = imgkit.config(wkhtmltoimage=r'wkhtmltoimage.exe')
 
     ascii_string = [".", ",", ":", ";", "+", "*", "?", "%", "$", "#", "@"]
@@ -123,6 +127,7 @@ def convert(args):
         shutil.rmtree('TextImages')
     os.mkdir('TextImages')
 
+    print('Rendering has started. It will take some time')
     for i in range(1, number_images + 1):
         try:
             image = get_image('Images/Image{0}.jpg'.format(str(i)))
@@ -135,6 +140,7 @@ def convert(args):
         except MemoryError:
             print('You ran out of memory\nClosing program...')
             exit()
+        print('{0} frame out of {1} rendered'.format(str(i), str(number_images)))
 
     res = Image.open('TextImages/Image1.jpg').size
     video = cv2.VideoWriter(args.outdir + args.filename + '.mp4', cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), int(fps), res)
